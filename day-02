@@ -1,0 +1,204 @@
+O Terraform é uma ferramenta de infraestrutura como código (IaC) de código aberto criada pela HashiCorpque permite definir e provisionar a infraestrutura do data center usando uma linguagem de configuração de alto nível. Esteja você apenas começando com o Terraform ou procurando refinar suas habilidades, este guia aborda comandos essenciais e práticas recomendadas, desde o nível iniciante até o avançado.
+
+🎯 Conceitos-chave
+Antes de mergulhar nos comandos, vamos revisar alguns conceitos fundamentais do Terraform:
+
+Provedor: Um plug-in que permite que o Terraform interaja com APIs de provedores de nuvem.
+Recurso: um componente da sua infraestrutura, como uma máquina virtual, contêiner ou rede.
+Módulo: um contêiner para vários recursos que são usados juntos.
+Estado: O status atual da sua infraestrutura gerenciada pelo Terraform.
+🏁 Comandos para iniciantes
+1. Inicialização
+Inicializar um diretório de trabalho
+terraform init
+Inicializa um diretório de trabalho contendo arquivos de configuração do Terraform. Esse comando baixa e instala os provedores necessários.
+
+2. Validação
+Validar arquivos de configuração
+terraform validate
+Valida a sintaxe e a configuração dos arquivos do Terraform no diretório.
+
+3. Planejar
+Gerar um plano de execução
+terraform plan
+Gera um plano de execução, mostrando quais ações o Terraform tomará para atingir o estado desejado.
+
+4. Aplicar
+Aplicar alterações à infraestrutura
+terraform apply
+Aplica as alterações necessárias para atingir o estado desejado da configuração. Esse comando solicita confirmação antes de continuar.
+
+5. Destrua
+Destrua a infraestrutura
+terraform destroy
+Destrói a infraestrutura gerenciada pelo Terraform. Esse comando também solicita confirmação.
+
+6. Gestão do Estado
+Mostrar estado atual
+terraform show
+Exibe o estado atual ou um arquivo de plano.
+
+7. Provedores
+Listar provedores
+terraform providers
+Lista todos os provedores exigidos pela configuração.
+
+8. Formatação
+Arquivos de configuração de formato
+terraform fmt
+Formata os arquivos de configuração do Terraform para um formato e estilo canônicos.
+
+9. Saída
+Saídas de exibição
+terraform output
+Lista as variáveis de saída definidas na configuração.
+
+10. Gerenciamento do espaço de trabalho
+Listar espaços de trabalho
+terraform workspace list
+Lista todos os espaços de trabalho disponíveis.
+
+Criar espaço de trabalho
+terraform workspace new my-workspace
+Cria um novo espaço de trabalho.
+
+Selecione Área de trabalho
+terraform workspace select my-workspace
+Seleciona um espaço de trabalho existente.
+
+🚀 Comandos intermediários
+1. Gestão do Estado
+Listar recursos no estado
+terraform state list
+Lista todos os recursos no estado do Terraform.
+
+Mostrar recurso de estado
+terraform state show <resource_name>
+Exibe informações detalhadas de estado sobre um único recurso.
+
+Remover recurso do estado
+terraform state rm <resource_name>
+Remove um recurso do estado do Terraform.
+
+Mover Recurso de Estado
+terraform state mv <source> <destination>
+Move um recurso de um estado para outro.
+
+2. Gráfico de dependência
+Gerar gráfico de dependência
+terraform graph | dot -Tpng > graph.png
+Gera uma representação visual do gráfico de dependência da configuração.
+
+3. Travamento
+Forçar estado de desbloqueio
+terraform force-unlock <lock_id>
+Desbloqueia manualmente o arquivo de estado.
+
+4. Variáveis de ambiente
+Definir variáveis de ambiente
+export TF_VAR_variable_name=value
+Define variáveis de ambiente para variáveis do Terraform.
+
+5. Configuração de back-end
+Configurar back-end
+terraform {
+  backend "s3" {
+    bucket = "my-terraform-state"
+    key    = "path/to/my/key"
+    region = "us-west-2"
+  }
+}
+Configura um back-end para armazenar o arquivo de estado.
+
+6. Módulos
+Inicializar módulos
+terraform get
+Inicializa os módulos usados na configuração.
+
+Módulos de atualização
+terraform get -update
+Atualiza os módulos usados na configuração.
+
+🧠 Comandos avançados
+1. Planejamento Detalhado
+Gerar e salvar plano
+terraform plan -out=myplan.tfplan
+Gera e salva um plano de execução em um arquivo.
+
+Aplicar plano salvo
+terraform apply myplan.tfplan
+Aplica as alterações descritas pelo plano salvo.
+
+2. Importação
+Importar infraestrutura existente
+terraform import <resource_type>.<resource_name> <resource_id>
+Importa a infraestrutura existente para o estado Terraform.
+
+3. Espaços de trabalho para ambientes
+Criar e usar espaços de trabalho para diferentes ambientes
+terraform workspace new dev
+terraform workspace new prod
+terraform workspace select dev
+terraform workspace select prod
+Cria e alterna entre espaços de trabalho para diferentes ambientes.
+
+4. Gerenciamento avançado de estado
+Arquivo de estado de backup
+cp terraform.tfstate terraform.tfstate.backup
+Faz backup manualmente do arquivo de estado.
+
+Restaurar arquivo de estado
+cp terraform.tfstate.backup terraform.tfstate
+Restaura o arquivo de estado de um backup.
+
+5. Expressões condicionais
+Usar expressões condicionais
+resource "aws_instance" "example" {
+  count = var.create_instance ? 1 : 0
+  ami           = "ami-123456"
+  instance_type = "t2.micro"
+}
+Usa expressões condicionais para criar recursos com base em valores de variáveis.
+
+6. Fontes de dados
+Usar fontes de dados
+data "aws_vpc" "selected" {
+  default = true
+}
+
+resource "aws_subnet" "example" {
+  vpc_id            = data.aws_vpc.selected.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = "us-west-2a"
+}
+Usa fontes de dados para buscar informações sobre recursos existentes.
+
+7. Depuração
+Habilitar registro detalhado
+export TF_LOG=DEBUG
+terraform apply
+Habilita o registro detalhado para fins de depuração.
+
+Registrar em um arquivo
+export TF_LOG=DEBUG
+export TF_LOG_PATH=./terraform.log
+terraform apply
+Registra informações de depuração em um arquivo.
+
+📊 Melhores práticas
+Usar o controle de versão
+Armazene seus arquivos de configuração do Terraform em um sistema de controle de versão (por exemplo, Git) para rastrear alterações e colaborar com os membros da equipe.
+Modularize seu código
+Divida suas configurações do Terraform em módulos reutilizáveis para promover a reutilização de código e gerenciar a complexidade.
+Gerencie arquivos de estado com segurança
+Use back-ends remotos para armazenar e gerenciar com segurança seus arquivos de estado, garantindo que eles não sejam excluídos ou modificados acidentalmente.
+Usar variáveis e saídas
+Use variáveis para parametrizar suas configurações e saídas para extrair informações úteis de suas configurações.
+Implementar pipelines de CI/CD
+Integre o Terraform a pipelines de CI/CD para automatizar o teste e a implantação de sua infraestrutura.
+Aplicar políticas
+Use ferramentas como o HashiCorp Sentinel ou o Open Policy Agent (OPA) para aplicar políticas e garantir a conformidade com os padrões da sua organização.
+🚀 Conclusão
+Dominar os comandos do Terraform do nível iniciante ao avançado é essencial para que os engenheiros de DevOps gerenciem e automatizem a infraestrutura com eficiência. Este guia abrangente fornece uma referência valiosa para navegar em seu ambiente Terraform. Seguindo as práticas recomendadas e aproveitando esses comandos, você pode garantir uma configuração de infraestrutura robusta e eficiente.
+
+Feliz Terraformação! 🎉
